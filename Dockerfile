@@ -1,5 +1,5 @@
 # Stage 1: Build vendor dependencies
-FROM composer:2 AS vendor
+FROM composer:2.7.7 AS vendor
 WORKDIR /app
 COPY composer.json composer.lock ./
 RUN COMPOSER_MEMORY_LIMIT=-1 composer install \
