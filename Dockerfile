@@ -10,11 +10,15 @@ RUN COMPOSER_MEMORY_LIMIT=-1 composer install \
 FROM php:8.3-fpm
 
 RUN apt-get update && apt-get install -y \
-    libpng-dev libjpeg-dev libfreetype6-dev zip git unzip curl libonig-dev libxml2-dev libzip-dev \
-    iputils-ping nano \
+    libpng-dev libjpeg-dev libfreetype6-dev \
+    libzip-dev zlib1g-dev libxml2-dev libonig-dev \
+    zip git curl nano iputils-ping \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd pdo pdo_mysql mbstring exif pcntl bcmath xml zip \
+    && docker-php-ext-install gd pdo pdo_mysql mbstring zip bcmath pcntl exif xml \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+RUN printf "\n" | pecl install redis \
+    && docker-php-ext-enable redis
 
 COPY --from=composer:2.7.7 /usr/bin/composer /usr/bin/composer
 
